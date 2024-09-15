@@ -18,3 +18,63 @@ Host key verification failed.
 ```
 
 `$ ssh-keygen -R ホスト名`
+
+# sshサーバ(sshd)を公開鍵認証にする
+- ローカルPCで公開鍵を作る
+
+```
+$ cd ~/.ssh
+$ ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/Users/ユーザー名/.ssh/id_rsa): 
+Enter passphrase (empty for no passphrase):  パスフレーズを入力（任意）
+Enter same passphrase again:  もう一度、パスフレーズを入力（任意）
+Your identification has been saved in id_rsa.
+Your public key has been saved in id_rsa.pub.
+
+$ ls 
+id_rsa  id_rsa.pub
+```
+
+- サーバにssh接続
+- ホームディレクトリに公開鍵をコピーする
+
+```
+$ chmod 700 ~/.ssh
+$ vi ~/.ssh/authorized_keys <-- 公開鍵(id_rsa.pub)の内容をコピペする
+$ chmod 600 authorized_keys
+```
+
+- /etc/ssh/sshd_config を編集する
+
+```
+$ sudo vi /etc/ssh/sshd_config
+
+PubkeyAuthentication yes　←公開鍵認証を有効にする
+
+PasswordAuthentication no ←パスワード認証を禁止する（任意）
+```
+
+- sshdを再起動する
+
+```
+$ sudo service sshd restart
+```
+
+# ~/.ssh/config の書き方
+
+```
+$ vi ~/.ssh/config
+
+# for ホスト名
+Host わかりやすい名前
+HostName ホスト名やIPアドレス
+User ユーザー名
+Port 22
+IdentityFile 秘密鍵のパス（~/.ssh/id_rsaなど）
+```
+
+- ssh接続するには
+```
+$ ssh わかりやすい名前 
+```

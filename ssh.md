@@ -17,4 +17,4 @@ Host key for 192.168.100.211 has changed and you have requested strict checking.
 Host key verification failed.
 ```
 
-`$ ssh-keygen -R ホスト名
+`$ ssh-keygen -R ホスト名`
